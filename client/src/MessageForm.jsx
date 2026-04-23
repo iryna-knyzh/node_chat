@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:3004/messages';
+const API_URL = `http://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}`;
 
-function sendMessage(text) {
-  return axios.post(API_URL, { text });
+function sendMessage(text, roomId) {
+  const username = localStorage.getItem('username');
+  return axios.post(`${API_URL}/messages`, { text, username, roomId });
 }
 
-export const MessageForm = () => {
+export const MessageForm = ({ roomId }) => {
   const [text, setText] = useState('');
 
   return (
@@ -15,9 +16,7 @@ export const MessageForm = () => {
       className="field is-horizontal"
       onSubmit={async (event) => {
         event.preventDefault();
-        
-        await sendMessage(text);
-        
+        await sendMessage(text, roomId);
         setText('');
       }}
     >

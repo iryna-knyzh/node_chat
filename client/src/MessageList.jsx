@@ -1,8 +1,16 @@
 export const MessageList = ({ messages }) => (
   <ul>
-    {messages.map(message => (
+    {messages.map((message) => (
       <li key={message.time}>
-        {message.text}
+        <b>{message.username}</b>{" "}
+        <small>
+          {new Date(message.time).toLocaleTimeString("en-US", {
+            hour12: false,
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </small>
+        : {message.text}
       </li>
     ))}
   </ul>
