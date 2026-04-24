@@ -8,8 +8,10 @@
     "start": "node src/index.js",
     "lint": "npm run format && mate-scripts lint",
     "format": "prettier --ignore-path .prettierignore --write './src/**/*.{js,ts}'",
+    "test:only": "mate-scripts test",
     "update": "mate-scripts update",
-    "postinstall": "npm run update"
+    "postinstall": "npm run update",
+    "test": ""
   },
   "author": "Mate academy",
   "license": "GPL-3.0",
