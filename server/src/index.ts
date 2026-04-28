@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { WebSocketServer } from 'ws';
-import { emitter } from './store.js';
+import { emitter } from './models/store.js';
 import usersRouter from './routes/users.js';
 import roomsRouter from './routes/rooms.js';
 import messagesRouter from './routes/messages.js';

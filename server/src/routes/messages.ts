@@ -1,18 +1,8 @@
 import { Router } from 'express';
-import { rooms, emitter, Message } from '../store.js';
+import * as messageController from '../controllers/messageController.js';
 
 const router = Router();
 
-router.post('/', (req, res) => {
-  const { roomId, text, username } = req.body;
-  if (!rooms[roomId]) {
-    res.status(404).send({ error: 'Room not found' });
-    return;
-  }
-  const message: Message = { username, text, time: new Date(), roomId };
-  rooms[roomId].messages.push(message);
-  emitter.emit('message', message);
-  res.status(201).send(rooms[roomId].messages);
-});
+router.post('/', messageController.create);
 
 export default router;

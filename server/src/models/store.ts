@@ -1,7 +1,5 @@
 import EventEmitter from 'events';
-
-export type Message = { username: string; text: string; time: Date; roomId: string };
-export type Room = { name: string; messages: Message[] };
+import type { Room } from './types.js';
 
 export const rooms: Record<string, Room> = {
   general: { name: 'General', messages: [] },

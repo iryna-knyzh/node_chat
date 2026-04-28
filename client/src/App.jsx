@@ -1,16 +1,14 @@
 // #region imports
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import "./App.css";
-import { MessageForm } from "./MessageForm.jsx";
-import { MessageList } from "./MessageList.jsx";
-import { UsernameForm } from "./UsernameForm.jsx";
-import { RoomList } from "./RoomList.jsx";
-import { RoomForm } from "./RoomForm.jsx";
+import { MessageForm } from "./components/MessageForm.jsx";
+import { MessageList } from "./components/MessageList.jsx";
+import { UsernameForm } from "./components/UsernameForm.jsx";
+import { RoomList } from "./components/RoomList.jsx";
+import { RoomForm } from "./components/RoomForm.jsx";
+import { roomService } from "./services/roomService.js";
+import { WS_URL } from "./http/config.js";
 // #endregion
-
-const API_URL = `http://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}`;
-const WS_URL = `ws://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}`;
 
 export function App() {
   const [username, setUsername] = useState(localStorage.getItem('username'));
@@ -33,12 +31,18 @@ export function App() {
       }
     });
 
+    socket.addEventListener("error", () => {
+      console.error("WebSocket error");
+    });
+
+    socket.addEventListener("close", () => {
+      console.warn("WebSocket closed");
+    });
+
     return () => socket.close();
   }, []);
 
-  const loadRooms = () => {
-    axios.get(`${API_URL}/rooms`).then(({ data }) => setRooms(data));
-  };
+  const loadRooms = () => roomService.getAll().then(setRooms);
 
   useEffect(() => {
     if (username) loadRooms();
@@ -46,7 +50,7 @@ export function App() {
 
   useEffect(() => {
     if (activeRoom) {
-      axios.get(`${API_URL}/rooms/${activeRoom.id}/messages`).then(({ data }) => setMessages(data));
+      roomService.getMessages(activeRoom.id).then(setMessages);
     }
   }, [activeRoom]);
 
